@@ -13,32 +13,34 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Meet_greet.init({
+  meet_greet.init({
     meet_greet_id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      event_id: {
-        allowNull: false,
-        type: DataTypes.SMALLINT
-      },
-      band_id: {
-        allowNull: false,
-        type: DataTypes.SMALLINT
-      },
-      meet_start_time: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
-      meet_end_time: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
+      type:DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement:true,
+      allowNull: false
+    },
+    event_id: {
+      type:DataTypes.INTEGER,
+      allowNull:false
+    },
+    band_id: {
+      type:DataTypes.INTEGER,
+      allowNull:false
+    },
+    meet_start_time: {
+      type:DataTypes.DATE,
+      allowNull:false
+    },
+    meet_end_time: {
+      type:DataTypes.DATE,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'meet_greet',
+    tableName: 'meet greet',
+    timestamps: false
   });
   return meet_greet;
 };
