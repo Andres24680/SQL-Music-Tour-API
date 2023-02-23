@@ -79,3 +79,5 @@ bands.delete('/:id', async (req, res) => {
 
 // EXPORT
 module.exports = bands
+
+
