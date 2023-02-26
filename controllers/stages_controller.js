@@ -1,16 +1,15 @@
 // DEPENDENCIES
 const stages = require('express').Router()
 const db = require('../models')
-const { Stage } = db 
+const { Stage, Event } = db 
 const { Op } = require('sequelize')
 
-// FIND ALL stage
+// FIND ALL STAGES
 stages.get('/', async (req, res) => {
     try {
-        const foundStages = await Stage.findAll({ 
-            order: [ [ 'stage_name', 'ASC' ] ], 
+        const foundStages = await Stage.findAll({
             where: {
-                name: { [Op.like]: `%${req.query.name ? req.query.name : '' }%` }
+                stage_name: { [Op.like]: `%${req.query.stage_name ? req.query.stage_name : ''}%` }
             }
         })
         res.status(200).json(foundStages)
@@ -19,11 +18,19 @@ stages.get('/', async (req, res) => {
     }
 })
 
-// FIND A SPECIFIC stage
-stages.get('/:id', async (req, res) => {
+// FIND A SPECIFIC STAGE
+stages.get('/:name', async (req, res) => {
     try {
         const foundStage = await Stage.findOne({
-            where: { stage_id: req.params.id }
+            where: { stage_name: req.params.name },
+            include:{ 
+                model: Event, 
+                as: "events",
+                through: { attributes: [] }
+            },
+            order: [
+                [{ model: Event, as: "events" }, 'date', 'ASC'],
+            ]
         })
         res.status(200).json(foundStage)
     } catch (error) {
@@ -31,7 +38,7 @@ stages.get('/:id', async (req, res) => {
     }
 })
 
-// CREATE A stage
+// CREATE A STAGE
 stages.post('/', async (req, res) => {
     try {
         const newStage = await Stage.create(req.body)
@@ -44,7 +51,7 @@ stages.post('/', async (req, res) => {
     }
 })
 
-// UPDATE A stage
+// UPDATE A STAGE
 stages.put('/:id', async (req, res) => {
     try {
         const updatedStages = await Stage.update(req.body, {
@@ -60,7 +67,7 @@ stages.put('/:id', async (req, res) => {
     }
 })
 
-// DELETE A stage
+// DELETE A STAGE
 stages.delete('/:id', async (req, res) => {
     try {
         const deletedStages = await Stage.destroy({
